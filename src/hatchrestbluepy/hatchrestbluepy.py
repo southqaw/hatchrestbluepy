@@ -25,12 +25,16 @@ class HatchRest(object):
         :param addr: The address tp connect to.
         """
         self.peripheral = btle.Peripheral()
+        self.addr = addr
         if addr is None:
             devices = self._scan(10.0)
             for device in devices:
                 if device.addr[:8] == MAC_PREFIX:
-                    addr = device.addr
-        self.peripheral.connect(addr, addrType=btle.ADDR_TYPE_RANDOM)
+                    self.addr = device.addr
+        self.connect()
+
+    def connect(self):
+        self.peripheral.connect(self.addr, addrType=btle.ADDR_TYPE_RANDOM)
 
         tx_service = self.peripheral.getServiceByUUID(SERV_TX)
         feedback_service = self.peripheral.getServiceByUUID(SERV_FEEDBACK)
@@ -54,7 +58,8 @@ class HatchRest(object):
         :param command: The command to send.
         """
         self.tx_char.write(bytearray(command, "utf-8"))
-        time.sleep(0.25)
+        time.sleep(0.5)
+        self._refresh_data()
         self._refresh_data()
 
     def _refresh_data(self) -> None:

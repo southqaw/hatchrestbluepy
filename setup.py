@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="hatchrestbluepy",
-    version="0.0.2",
+    version="1.0.0",
     author="Klint Youngmeyer",
     author_email="kkyoungmeyer@gmail.com",
     description="A Python library to control the Hatch Rest sound machine, using bluepy",

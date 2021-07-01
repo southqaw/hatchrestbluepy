@@ -9,10 +9,11 @@ class ScanDelegate(btle.DefaultDelegate):
         btle.DefaultDelegate.__init__(self)
 
     def handleDiscovery(self, dev, isNewDev, isNewData):
-        if isNewDev:
-            print("Discovered device {}".format(dev.addr))
-        elif isNewData:
-            print("Received new data from {}".format(dev.addr))
+        pass
+        # if isNewDev:
+        #     print("Discovered device {}".format(dev.addr))
+        # elif isNewData:
+        #     print("Received new data from {}".format(dev.addr))
 
 
 class HatchRest(object):
@@ -37,6 +38,8 @@ class HatchRest(object):
         self.tx_char = tx_service.getCharacteristics()[0]
         self.feedback_char = feedback_service.getCharacteristics()[0]
 
+        self._refresh_data()
+
     def _scan(self, timeout: float) -> List[btle.ScanEntry]:
         """
         Get a list of BLE devices in range of the host.
@@ -54,7 +57,7 @@ class HatchRest(object):
         time.sleep(0.25)
         self._refresh_data()
 
-    def _refresh_date(self) -> None:
+    def _refresh_data(self) -> None:
         """ Request updated data from the device and set the local attributes. """
         response = [hex(x) for x in list(self.feedback_char.read())]
 
